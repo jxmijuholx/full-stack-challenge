@@ -1,7 +1,10 @@
 import React from 'react';
 
-const Total = ({ part1, part2, part3 }) => {
-    const summa = part1.exercises + part2.exercises + part3.exercises;
+const Total = ({ parts }) => {
+    let summa = 0;
+     for (let i = 0; i < parts.length; i++) {
+        summa += parts[i].exercises;
+    }
     return (
         <p>Number of exercises {summa}</p>
     );
