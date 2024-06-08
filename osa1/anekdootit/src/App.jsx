@@ -43,6 +43,7 @@ const App = () => {
       <Votes votes={votes[selected]} />
       <Header text="Anecdote with most votes" />
       <Anecdote anecdote={winner} />
+      <Votes votes={votes[mostVotes]} />
     </div>
   )
 }
