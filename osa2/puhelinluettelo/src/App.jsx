@@ -3,18 +3,22 @@ import { useState } from 'react'
 const App = () => {
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas' }
-  ]) 
+  ])
   const [newName, setNewName] = useState('')
 
   const addPerson = (event) => {
     event.preventDefault()
-   const personObject = {
+    const personObject = {
       name: newName
-   }
-   setPersons(persons.concat(personObject))
-   console.log(persons)
-    setNewName('')
-    console.log(setNewName)
+    }
+    if (persons.some(person => person.name === newName)) {
+      window.alert(`${newName} is already added to phonebook`)
+      return
+    }else{
+      setPersons(persons.concat(personObject))
+      console.log(persons)
+      setNewName('')
+    }
   }
 
   const handleNameChange = (event) => {
@@ -37,10 +41,10 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.map(person =>
-        <li key={person.name}> 
+        {persons.map(person =>
+      <li key={person.name}> 
           {person.name}
-        </li>)}
+      </li>)}
     </div>
   )
 
