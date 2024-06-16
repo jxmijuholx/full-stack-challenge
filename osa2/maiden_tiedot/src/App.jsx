@@ -44,7 +44,7 @@ const App = () => {
       )
       }
       {filteredCountries.length === 1 && filteredCountries[0].name.common === 'Jamaica' &&(
-        <YouTubeVideo />
+        <YouTubeVideo  />
       )
       }
     </div>
