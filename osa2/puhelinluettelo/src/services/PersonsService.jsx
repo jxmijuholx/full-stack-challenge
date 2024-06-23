@@ -19,8 +19,7 @@ const create = async newObject => {
     console.log('Lisätty:', response.data);
     return response.data;
   } catch (error) {
-    console.error('Errori lisäämises:', error);
-    throw error;
+      console.log('Virhe henkilön lisäämisessä',response.data);
   }
 };
 
