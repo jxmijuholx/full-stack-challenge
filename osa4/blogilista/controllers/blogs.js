@@ -6,7 +6,7 @@ blogsRouter.get('/', async (request, response) => {
     response.json(blogs)
     })
 
-blogsRouter.get('/:id', async(request, response, next) => {
+blogsRouter.get('/:id', async(request, response) => {
     const blog = await Blog.findById(request.params.id)
     if (blog) {
         response.json(blog)
@@ -15,7 +15,7 @@ blogsRouter.get('/:id', async(request, response, next) => {
     }
 })
 
-blogsRouter.post('/', async (request, response, next) => {
+blogsRouter.post('/', async (request, response) => {
     const body = request.body
 
     const blog = new Blog({
@@ -37,12 +37,16 @@ blogsRouter.post('/', async (request, response, next) => {
     response.status(201).json(savedBlog)
 });
 
-blogsRouter.delete('/:id', async (request, response, next) => {
-    await Blog.findByIdAndRemove(request.params.id)
-    response.status(204).end()
+blogsRouter.delete('/:id', async (request, response) => {
+    const blog = await Blog.findByIdAndDelete(request.params.id)
+    if (blog) {
+      response.status(204).end()
+    } else if( !blog.id) {
+      response.status(400).json({ error: 'invalid id' })
+    }
 });
 
-blogsRouter.put('/:id',async (request, response, next) => {
+blogsRouter.put('/:id', async (request, response)=> {
     const body = request.body
 
     const blog = {
@@ -54,6 +58,19 @@ blogsRouter.put('/:id',async (request, response, next) => {
 
     const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
     response.status(200).json(updatedBlog)
-});
+})
+
+blogsRouter.patch('/:id', async (request, response) => {
+    const body = request.body
+
+    const blog = {
+        likes: body.likes
+    }
+
+    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+    response.status(200).json(updatedBlog)
+})
+
+
 
 module.exports = blogsRouter
