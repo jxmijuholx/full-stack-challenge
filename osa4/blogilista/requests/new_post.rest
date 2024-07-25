@@ -1,9 +1,14 @@
-POST http://localhost:3991api/blogs
+POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
   "title": "Jami",
   "author": "Juhola",
   "url": "https://neetcode.io/",
-  "likes": 69
+  "likes": 69,
+  "user": {
+    "username": "jami",
+    "name": "Jami Juhola",
+    "id" : "6696b47e027e65230585c6fd"
+  }
 }
