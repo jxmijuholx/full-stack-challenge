@@ -31,26 +31,25 @@ const errorHandler = (error, request, response, next) => {
   next(error);
 };
 
-const auth = async (request, response, next) => {
-  try {
-    const authorization = request.get('Authorization');
-    if (!authorization || !authorization.toLowerCase().startsWith('bearer ')) {
-      return response.status(403).send("Access denied. No token provided.");
-    }
-
+const userExtractor = async (req, res, next) => {
+  const authorization = req.get('Authorization');
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     const token = authorization.substring(7);
-
-    const decoded = jwt.verify(token, process.env.SECRET);
-    request.user = decoded;
-    next();
-  } catch (error) {
-    response.status(400).send("Invalid token");
+    try {
+      const decodedToken = jwt.verify(token, process.env.SECRET);
+      req.user = await User.findById(decodedToken.id);
+    } catch (error) {
+      return res.status(401).json({ error: 'Token invalid or expired' });
+    }
+  } else {
+    return res.status(401).json({ error: 'Token missing or invalid' });
   }
+  next();
 };
 
 module.exports = {
   requestLogger,
   unknownEndpoint,
   errorHandler,
-  auth
+  userExtractor
 };
