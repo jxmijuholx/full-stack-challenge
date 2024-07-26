@@ -1,9 +1,0 @@
-POST http://localhost:3001/api/blogs
-
-Content-Type: application/json
-
-{
-  "author": "Juhola",
-  "url": "https://neetcode.io/",
-  "likes": 69
-}

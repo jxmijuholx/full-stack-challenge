@@ -10,34 +10,34 @@ usersRouter.get('/', async (request, response) => {
     response.json(users);
 });
 
-usersRouter.post('/', async (request, response) => {
-    const { username, name, password } = request.body;
+usersRouter.post('/', async (req, res) => {
+    const { username, name, password } = req.body;
+  
+    if (!username || username.length < 3) {
+      return res.status(400).json({ error: 'Username must be at least 3 characters long' });
+    }
+    if (!password || password.length < 3) {
+      return res.status(400).json({ error: 'Password must be at least 3 characters long' });
+    }
+  
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.status(400).json({ error: 'Username must be unique' });
+    }
 
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash(password, saltRounds);
-
+  
     const user = new User({
-        username,
-        name,
-        passwordHash
+      username,
+      name,
+      passwordHash,
     });
-
-    const savedUser = await user.save();
-    response.status(201).json(savedUser);
-});
-
-usersRouter.delete('/:id', async (request, response) => {
-    await User.findByIdAndRemove(request.params.id);
-    response.status(204).end();
-});
-
-usersRouter.get('/all', userExtractor , async (req, res) => {
-    try {
-        const users = await User.find().select('-passwordHash -__v');
-        res.json(users);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to retrieve users' });
-    }
-});
+  
+      const savedUser = await user.save();
+      res.status(201).json(savedUser);
+  });
+  
+  module.exports = usersRouter;
 
 module.exports = usersRouter;

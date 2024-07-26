@@ -26,30 +26,32 @@ const errorHandler = (error, request, response, next) => {
     return response.status(401).json({
       error: 'invalid token or unauthorized access'
     });
+  } else if (error.name === 'TokenExpiredError') {
+    return response.status(401).json({ error: 'token expired' });
   }
 
   next(error);
 };
 
-const userExtractor = async (req, res, next) => {
+const tokenExtractor = (req, res, next) => {
   const authorization = req.get('Authorization');
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     const token = authorization.substring(7);
     try {
       const decodedToken = jwt.verify(token, process.env.SECRET);
-      req.user = await User.findById(decodedToken.id);
+      req.user = decodedToken;
+      next();
     } catch (error) {
       return res.status(401).json({ error: 'Token invalid or expired' });
     }
   } else {
     return res.status(401).json({ error: 'Token missing or invalid' });
   }
-  next();
 };
 
 module.exports = {
   requestLogger,
   unknownEndpoint,
   errorHandler,
-  userExtractor
+  tokenExtractor
 };
