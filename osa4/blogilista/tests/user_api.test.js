@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt')
-const { test, after, beforeEach, describe, toBeDefined, toBeUndefined } = require('node:test');
+const { test, expect, beforeEach, describe, toBeDefined, toBeUndefined } = require('node:test');
 const assert = require('node:assert');
 const supertest = require('supertest');
 const app = require('../app');
@@ -19,9 +19,9 @@ describe('kun on käyttäjä ;)', () => {
         const ekat = await helper.usersInDb()
 
         const newUser = {
-            username: 'jami',
-            name: 'Jami Juhola',
-            password: 'salasana'
+            username: 'roope',
+            name: 'roope',
+            password: 'salasana',
         }
 
         await api
