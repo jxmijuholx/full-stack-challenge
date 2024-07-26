@@ -1,6 +1,7 @@
-const mongoose = require('mongoose')
-const jwt = require('jsonwebtoken')
-const Joi = require('joi')
+const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const Joi = require('joi');
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -17,11 +18,11 @@ const userSchema = new mongoose.Schema({
     },
     blogs: [
         {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Blog'
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Blog'
         }
     ]
-})
+});
 
 userSchema.methods.generateAuthToken = function () {
     const token = jwt.sign({ _id: this._id }, process.env.SECRET, { expiresIn: '1d' });
@@ -30,22 +31,13 @@ userSchema.methods.generateAuthToken = function () {
 
 userSchema.set('toJSON', {
     transform: (document, returnedObject) => {
-        returnedObject.id = returnedObject._id.toString()
-        delete returnedObject._id
-        delete returnedObject.__v
-        delete returnedObject.passwordHash
+        returnedObject.id = returnedObject._id.toString();
+        delete returnedObject._id;
+        delete returnedObject.__v;
+        delete returnedObject.passwordHash;
     }
-})
+});
 
-const User = mongoose.model('User', userSchema)
+const User = mongoose.model('User', userSchema);
 
-const validate = (user) => {
-    const schema = Joi.object({
-        username: Joi.string().required(),
-        name: Joi.string().required(),
-        password: Joi.string().required()
-    })
-    return schema.validate(user)
-}
-
-module.exports = {User, validate}
+module.exports = User;

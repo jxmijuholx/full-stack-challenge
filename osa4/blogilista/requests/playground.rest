@@ -1,9 +1,0 @@
-curl -X POST http://localhost:3001/api/blogs \
--H "Content-Type: application/json" \
--H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyIiwiaWQiOiI2NmEzYWMzN2Q4ODc1NWI0YThkMTY5MzYiLCJpYXQiOjE3MjIwMDI0OTYsImV4cCI6MTcyMjA4ODg5Nn0.V9U2KpnNGGXdOS53BDcCCjMlwhs2GNRcaZd_TbofI78" \
--d '{
-  "title": "New Blog Title",
-  "author": "Test User",
-  "url": "http://example.com",
-  "likes": 5
-}'

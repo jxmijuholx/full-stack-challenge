@@ -28,30 +28,17 @@ const errorHandler = (error, request, response, next) => {
     });
   } else if (error.name === 'TokenExpiredError') {
     return response.status(401).json({ error: 'token expired' });
+  }else if (error.name === 'TypeError') {
+    return response.status(400).json({ error: 'missing or invalid data' });
+  }else if (error.name === 'Error') {
+    return response.status(400).json({ error: error.message
+    });
   }
-
   next(error);
-};
-
-const tokenExtractor = (req, res, next) => {
-  const authorization = req.get('Authorization');
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    const token = authorization.substring(7);
-    try {
-      const decodedToken = jwt.verify(token, process.env.SECRET);
-      req.user = decodedToken;
-      next();
-    } catch (error) {
-      return res.status(401).json({ error: 'Token invalid or expired' });
-    }
-  } else {
-    return res.status(401).json({ error: 'Token missing or invalid' });
-  }
 };
 
 module.exports = {
   requestLogger,
   unknownEndpoint,
   errorHandler,
-  tokenExtractor
 };

@@ -1,7 +1,7 @@
-POST http://localhost:3001/api/blogs
-Content-Type: application/json
-
-{
+curl -X POST http://localhost:3001/api/blogs \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY2YTJiOTYzZTg0ZjljYzc2MDA5MDYwMCIsImlhdCI6MTcyMjAwNTg0NCwiZXhwIjoxNzIyMDkyMjQ0fQ.oetUD0Ty4zZ-ZRlYZ_oyC_ovTPR-QPQs0TITcFOiykg" \
+-d '{
   "title": "Jami",
   "author": "Juhola",
   "url": "https://neetcode.io/",
@@ -11,4 +11,4 @@ Content-Type: application/json
     "name": "Jami Juhola",
     "id" : "6696b47e027e65230585c6fd"
   }
-}
+}'
