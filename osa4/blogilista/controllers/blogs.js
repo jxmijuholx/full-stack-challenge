@@ -3,32 +3,39 @@ const jwt = require('jsonwebtoken');
 const Blog = require('../models/blog');
 const User  = require('../models/user');
 
-const getTokenFrom = request => {
-    const authorization = request.get('authorization');
-    if (authorization && authorization.startsWith('Bearer ')) {
-        return authorization.replace('Bearer ', '');
+const getTokenFrom = req => {
+    const authorization = req.get('authorization');
+    if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+      return authorization.substring(7);
     }
     return null;
-};
-
-blogsRouter.get('/', async (req, res) => {
+  };
+  
+  blogsRouter.get('/', async (req, res) => {
     const token = getTokenFrom(req);
-    if (token) {
-        try {
-            const decodedToken = jwt.verify(token, process.env.SECRET);
-            const user = await User.findById(decodedToken.id)
-            if (!user) {
-                return res.status(401).json({ error: 'User not found' });
-            }
-            const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 });
-            res.json(blogs);
-        } catch (error) {
-            res.status(401).json({ error: 'Token invalid' });
-        }
-    } else {
-        res.status(401).json({ error: 'Token missing' });
+  
+    if (!token) {
+      return res.status(401).json({ error: 'Token missing' });
     }
-});
+  
+    try {
+      const decodedToken = jwt.verify(token, process.env.SECRET);
+      if (!decodedToken.id) {
+        return res.status(401).json({ error: 'Token invalid' });
+      }
+  
+      const user = await User.findById(decodedToken.id);
+      if (!user) {
+        return res.status(401).json({ error: 'User not found' });
+      }
+  
+      const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 });
+      res.json(blogs);
+    } catch (error) {
+      console.error('Error decoding token or fetching data:', error.message);
+      res.status(401).json({ error: 'Token invalid' });
+    }
+  });
 
 blogsRouter.get('/:id', async (req, res) => {
     const token = getTokenFrom(req);

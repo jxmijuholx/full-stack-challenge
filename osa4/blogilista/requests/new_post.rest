@@ -1,14 +1,14 @@
 curl -X POST http://localhost:3001/api/blogs \
 -H "Content-Type: application/json" \
--H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY2YTJiOTYzZTg0ZjljYzc2MDA5MDYwMCIsImlhdCI6MTcyMjAwNTg0NCwiZXhwIjoxNzIyMDkyMjQ0fQ.oetUD0Ty4zZ-ZRlYZ_oyC_ovTPR-QPQs0TITcFOiykg" \
+-H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY2YTJiOTYzZTg0ZjljYzc2MDA5MDYwMCIsImlhdCI6MTcyMjEwNjQzNCwiZXhwIjoxNzIyMTkyODM0fQ.wvE9frjiRyehQoiiFc_xjBpItPRuQoMOUyfKSvX-2A8" \
 -d '{
-  "title": "Jami",
-  "author": "Juhola",
-  "url": "https://neetcode.io/",
+  "title": "frontend",
+  "author": "jami",
+  "url": "frontend.com",
   "likes": 69,
   "user": {
-    "username": "jami",
-    "name": "Jami Juhola",
-    "id" : "6696b47e027e65230585c6fd"
+    "username": "root",
+    "name": "salasana",
+    "id" : "66a2b963e84f9cc760090600"
   }
 }'
