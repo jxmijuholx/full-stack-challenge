@@ -20,7 +20,7 @@ const getAll = async () => {
     } else {
       console.error('Error fetching blogs:', error.message);
     }
-    throw error;
+    return [];
   }
 };
 
