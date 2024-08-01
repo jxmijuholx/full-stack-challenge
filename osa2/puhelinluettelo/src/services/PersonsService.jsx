@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = '/api/persons';
+const baseUrl = 'https://puhelinluettelo-backend-zjzz.onrender.com/api/persons';
 
 const getAll = async () => {
     try {
