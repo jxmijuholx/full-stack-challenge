@@ -11,12 +11,13 @@ const getTokenFrom = req => {
     return null;
   };
   
+  
   blogsRouter.get('/', async (req, res) => {
     const token = getTokenFrom(req);
   
     if (!token) {
-      return res.status(401).json({ error: 'Token missing' });
-    }
+        return res.status(401).json({ error: 'Token missing' });
+      }
   
     try {
       const decodedToken = jwt.verify(token, process.env.SECRET);

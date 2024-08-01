@@ -17,15 +17,6 @@ const App = () => {
   const blogFormRef = useRef();
 
   useEffect(() => {
-    blogService.getAll()
-      .then(blogs => setBlogs(blogs))
-      .catch(error => {
-        console.error('Error fetching blogs:', error);
-        showNotification('Failed to fetch blogs. Please try again.', 'error');
-      });
-  }, []);
-
-  useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser');
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
@@ -33,6 +24,18 @@ const App = () => {
       blogService.setToken(user.token);
     }
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      blogService.getAll()
+        .then(blogs => setBlogs(blogs))
+        .catch(error => {
+          console.error('Error fetching blogs:', error);
+          showNotification('Failed to fetch blogs. Please try again.', 'error');
+        });
+    }
+  }, [user]);
+
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -108,3 +111,4 @@ const App = () => {
 };
 
 export default App;
+ 
