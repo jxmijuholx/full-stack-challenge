@@ -36,7 +36,6 @@ const App = () => {
     }
   }, [user]);
 
-
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
@@ -73,12 +72,22 @@ const App = () => {
       });
   };
 
+  const updateBlog = (updatedBlog, deletedBlogId) => {
+    if (deletedBlogId) {
+      setBlogs(blogs.filter(blog => blog.id !== deletedBlogId));
+    } else {
+      setBlogs(blogs.map(blog => blog.id !== updatedBlog.id ? blog : updatedBlog));
+    }
+  };
+
   const showNotification = (message, type) => {
     setNotification({ message, type });
     setTimeout(() => {
       setNotification({ message: '', type: '' });
     }, 5000);
   };
+
+  const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes);
 
   return (
     <div>
@@ -101,8 +110,14 @@ const App = () => {
           <Togglable buttonLabel="new blog" ref={blogFormRef}>
             <BlogForm createBlog={addBlog} />
           </Togglable>
-          {blogs.map(blog => (
-            <Blog key={blog.id} blog={blog} />
+          {sortedBlogs.map(blog => (
+            <Blog 
+              key={blog.id} 
+              blog={blog} 
+              updateBlog={updateBlog} 
+              showNotification={showNotification} 
+              currentUser={user} 
+            />
           ))}
         </div>
       )}
@@ -111,4 +126,3 @@ const App = () => {
 };
 
 export default App;
- 

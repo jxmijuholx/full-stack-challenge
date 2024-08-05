@@ -38,4 +38,36 @@ const create = async newObject => {
   }
 };
 
-export default { getAll, create, setToken };
+const update = async (id, newObject) => {
+  const config = {
+    headers: { Authorization: token },
+  };
+
+  try {
+    const response = await axios.put(`${baseUrl}/${id}`, newObject, config);
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.status === 401) {
+      throw new Error('Unauthorized - Invalid or expired token');
+    }
+    throw new Error('Unable to update blog');
+  }
+}
+
+const deleteBlog = async (id) =>{
+  const config = {
+    headers: { Authorization: token },
+  };
+
+  try {
+    const response = await axios.delete(`${baseUrl}/${id}`, config);
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.status === 401) {
+      throw new Error('Unauthorized - Invalid or expired token');
+    }
+    throw new Error('Unable to delete blog');
+  }
+}
+
+export default { getAll, create, setToken, update, deleteBlog };
