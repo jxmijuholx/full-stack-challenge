@@ -1,45 +1,45 @@
-import React, { useState } from 'react';
-import blogService from '../services/blogs';
+import React, { useState } from 'react'
+import blogService from '../services/blogs'
 
 const Blog = ({ blog, updateBlog, showNotification, currentUser }) => {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(false)
 
   const handleLike = () => {
     if (!blog.user || !blog.user.id) {
-      showNotification('Error: Blog user ID is missing', 'error');
-      return;
+      showNotification('Error: Blog user ID is missing', 'error')
+      return
     }
 
     const updatedBlog = {
       ...blog,
       likes: blog.likes + 1,
       user: blog.user.id
-    };
+    }
 
     blogService.update(blog.id, updatedBlog)
       .then(returnedBlog => {
-        updateBlog(returnedBlog);
-        showNotification(`Tykätty blogi: "${returnedBlog.title}"`, 'success');
+        updateBlog(returnedBlog)
+        showNotification(`Tykätty blogi: "${returnedBlog.title}"`, 'success')
       })
       .catch(error => {
-        console.error('Epäonnistu broo:', error);
-        showNotification('Ei onnistunu, koita uuestaa.', 'error');
-      });
-  };
+        console.error('Epäonnistu broo:', error)
+        showNotification('Ei onnistunu, koita uuestaa.', 'error')
+      })
+  }
 
   const handleDelete = () => {
     if (window.confirm(`Delete blog: "${blog.title}" by ${blog.author}?`)) {
       blogService.deleteBlog(blog.id)
         .then(() => {
-          updateBlog(null, blog.id);
-          showNotification(`Blog "${blog.title}" deleted successfully`, 'success');
+          updateBlog(null, blog.id)
+          showNotification(`Blog "${blog.title}" deleted successfully`, 'success')
         })
         .catch(error => {
-          console.error('Error deleting blog:', error);
-          showNotification('Failed to delete blog. Please try again.', 'error');
-        });
+          console.error('Error deleting blog:', error)
+          showNotification('Failed to delete blog. Please try again.', 'error')
+        })
     }
-  };
+  }
 
   const blogStyle = {
     paddingTop: 10,
@@ -47,7 +47,7 @@ const Blog = ({ blog, updateBlog, showNotification, currentUser }) => {
     border: 'solid',
     borderWidth: 1,
     marginBottom: 5
-  };
+  }
 
   return (
     <div style={blogStyle}>
@@ -65,7 +65,7 @@ const Blog = ({ blog, updateBlog, showNotification, currentUser }) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Blog;
+export default Blog

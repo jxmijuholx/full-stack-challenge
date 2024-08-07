@@ -1,93 +1,93 @@
-import { useEffect, useRef, useState } from 'react';
-import Blog from './components/Blog';
-import BlogForm from './components/BlogForm';
-import LoginForm from './components/LoginForm';
-import Notification from './components/Notification';
-import Togglable from './components/Togglable';
-import blogService from './services/blogs';
-import loginService from './services/loginService';
+import { useEffect, useRef, useState } from 'react'
+import Blog from './components/Blog'
+import BlogForm from './components/BlogForm'
+import LoginForm from './components/LoginForm'
+import Notification from './components/Notification'
+import Togglable from './components/Togglable'
+import blogService from './services/blogs'
+import loginService from './services/loginService'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [user, setUser] = useState(null);
-  const [notification, setNotification] = useState({ message: '', type: '' });
+  const [blogs, setBlogs] = useState([])
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [user, setUser] = useState(null)
+  const [notification, setNotification] = useState({ message: '', type: '' })
 
-  const blogFormRef = useRef();
+  const blogFormRef = useRef()
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser');
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON);
-      setUser(user);
-      blogService.setToken(user.token);
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
     }
-  }, []);
+  }, [])
 
   useEffect(() => {
     if (user) {
       blogService.getAll()
         .then(blogs => setBlogs(blogs))
         .catch(error => {
-          console.error('Error fetching blogs:', error);
-          showNotification('Failed to fetch blogs. Please try again.', 'error');
-        });
+          console.error('Error fetching blogs:', error)
+          showNotification('Failed to fetch blogs. Please try again.', 'error')
+        })
     }
-  }, [user]);
+  }, [user])
 
   const handleLogin = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
     try {
-      const user = await loginService.login({ username, password });
-      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user));
-      blogService.setToken(user.token);
-      setUser(user);
-      setUsername('');
-      setPassword('');
-      showNotification('Login successful', 'success');
+      const user = await loginService.login({ username, password })
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
+      blogService.setToken(user.token)
+      setUser(user)
+      setUsername('')
+      setPassword('')
+      showNotification('Login successful', 'success')
     } catch (exception) {
-      console.error('Login failed:', exception);
-      showNotification('Wrong credentials', 'error');
+      console.error('Login failed:', exception)
+      showNotification('Wrong credentials', 'error')
     }
-  };
+  }
 
   const handleLogout = () => {
-    window.localStorage.removeItem('loggedBlogappUser');
-    setUser(null);
-    blogService.setToken(null);
-    showNotification('Logged out successfully', 'success');
-  };
+    window.localStorage.removeItem('loggedBlogappUser')
+    setUser(null)
+    blogService.setToken(null)
+    showNotification('Logged out successfully', 'success')
+  }
 
   const addBlog = (blogObject) => {
-    blogFormRef.current.toggleVisibility();
+    blogFormRef.current.toggleVisibility()
     blogService.create(blogObject)
       .then(newBlog => {
-        setBlogs(blogs.concat(newBlog));
-        showNotification(`Blog "${newBlog.title}" added successfully`, 'success');
+        setBlogs(blogs.concat(newBlog))
+        showNotification(`Blog "${newBlog.title}" added successfully`, 'success')
       })
       .catch(error => {
-        console.error('Error creating blog:', error);
-        showNotification('Failed to create a new blog. Please try again.', 'error');
-      });
-  };
+        console.error('Error creating blog:', error)
+        showNotification('Failed to create a new blog. Please try again.', 'error')
+      })
+  }
 
   const updateBlog = (updatedBlog, deletedBlogId) => {
     if (deletedBlogId) {
-      setBlogs(blogs.filter(blog => blog.id !== deletedBlogId));
+      setBlogs(blogs.filter(blog => blog.id !== deletedBlogId))
     } else {
-      setBlogs(blogs.map(blog => blog.id !== updatedBlog.id ? blog : updatedBlog));
+      setBlogs(blogs.map(blog => blog.id !== updatedBlog.id ? blog : updatedBlog))
     }
-  };
+  }
 
   const showNotification = (message, type) => {
-    setNotification({ message, type });
+    setNotification({ message, type })
     setTimeout(() => {
-      setNotification({ message: '', type: '' });
-    }, 5000);
-  };
+      setNotification({ message: '', type: '' })
+    }, 5000)
+  }
 
-  const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes);
+  const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
 
   return (
     <div>
@@ -111,18 +111,18 @@ const App = () => {
             <BlogForm createBlog={addBlog} />
           </Togglable>
           {sortedBlogs.map(blog => (
-            <Blog 
-              key={blog.id} 
-              blog={blog} 
-              updateBlog={updateBlog} 
-              showNotification={showNotification} 
-              currentUser={user} 
+            <Blog
+              key={blog.id}
+              blog={blog}
+              updateBlog={updateBlog}
+              showNotification={showNotification}
+              currentUser={user}
             />
           ))}
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App
